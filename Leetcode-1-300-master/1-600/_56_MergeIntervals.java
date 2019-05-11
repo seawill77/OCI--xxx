@@ -31,22 +31,32 @@ public class _56_MergeIntervals {
      * @param intervals
      * @return
      */
-    public List<Interval> merge(List<Interval> intervals) {
-        if (intervals == null || intervals.size() <= 1) return intervals;
-        Collections.sort(intervals, (a, b) -> a.start - b.start);
-        int start = intervals.get(0).start;
-        int end = intervals.get(0).end;
-        List<Interval> res = new ArrayList<>();
-        for (Interval interval : intervals) {
-            if (interval.start <= end) {
-                end = Math.max(end, interval.end);
+   class Solution {
+    public int[][] merge(int[][] intervals) {
+     if (intervals == null || intervals.length <= 1) return intervals;
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        int start = intervals[0][0];
+        int end = intervals[0][1];
+        List<int[]> res = new ArrayList<>();
+        
+        for (int[] interval : intervals) {
+            if (interval[0] <= end) {
+                end = Math.max(end, interval[1]);
             } else {
-                res.add(new Interval(start, end));
-                start = interval.start;
-                end = interval.end;
+                res.add(new int[]{start, end});
+                start = interval[0];
+                end = interval[1];
             }
         }
-        res.add(new Interval(start, end));
-        return res;
+        res.add(new int[]{start, end});
+        
+        int[][] ans = new int[res.size()][2];
+        
+        for (int i = 0; i < res.size(); i++) {
+            ans[i][0] = res.get(i)[0];
+            ans[i][1] = res.get(i)[1];
+        }
+        
+        return ans;
     }
 }
