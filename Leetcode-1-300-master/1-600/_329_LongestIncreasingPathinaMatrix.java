@@ -65,7 +65,7 @@ public class _329_LongestIncreasingPathinaMatrix {
             return 0;
         }
         if (cache[i][j] != 0) {
-            return cache[i][j];
+            return cache[i][j];   //记录下 从 matrix[i][j] 这个点开始走，的最大值，就不用再次遍历，否则超时。
         }
         min = matrix[i][j];
         int a = dfs(matrix, min, i - 1, j, m, n, cache) + 1;
