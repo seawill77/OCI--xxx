@@ -132,3 +132,92 @@ public class _146_LRUCache {
         }
     }
 }
+
+
+******************************
+******************************
+
+
+class LRUCache {
+
+    class Node {
+        Node pre;
+        Node next;
+        int key;
+        int value;
+        public Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+    
+    Node head;
+    Node tail;
+    int capacity;
+    HashMap<Integer, Node> map;
+    
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        map = new HashMap<>();
+        head = null;
+        tail = null;
+    }
+    
+    public int get(int key) {
+        Node node = map.get(key);
+        
+        if (node == null) {
+            return -1;
+        } 
+            
+        if (node != tail) { 
+          remove(node);
+        }
+        return node.value;
+    }
+    
+    public void put(int key, int value) {
+        Node node = map.get(key);
+        
+        if (node != null) {
+            node.value = value;
+            if (node != tail) {
+                remove(node);
+            }
+        } else {
+            node = new Node(key, value);
+            if(capacity == 0) {
+                Node temp = head;
+                head = head.next;
+                map.remove(temp.key);
+                capacity++;
+            }
+            if (head == null && tail == null) {
+                head = node;
+                tail = node;
+            } else {
+                addTail(node);
+            }
+            map.put(key, node);
+            capacity--;
+        }
+    }
+    
+    public void remove(Node node) {
+            if (node == head) {
+                head = node.next;
+            } else {
+                node.next.pre = node.pre;
+                node.pre.next= node. next;
+            }
+                addTail(node);
+                tail = node;
+    }
+    
+    public void addTail(Node node) {
+                tail.next = node;
+                node.pre = tail;
+                node.next = null;
+                tail = node;
+    }
+}
