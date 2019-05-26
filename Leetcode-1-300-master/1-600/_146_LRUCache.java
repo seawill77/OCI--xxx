@@ -139,7 +139,7 @@ public class _146_LRUCache {
 
 
 class LRUCache {
-
+    
     class Node {
         Node pre;
         Node next;
@@ -151,11 +151,11 @@ class LRUCache {
         }
     }
     
-    Node head;
-    Node tail;
     int capacity;
     HashMap<Integer, Node> map;
-    
+    Node head;
+    Node tail;
+
     public LRUCache(int capacity) {
         this.capacity = capacity;
         map = new HashMap<>();
@@ -165,14 +165,9 @@ class LRUCache {
     
     public int get(int key) {
         Node node = map.get(key);
+        if (node == null) return -1;
         
-        if (node == null) {
-            return -1;
-        } 
-            
-        if (node != tail) { 
-          remove(node);
-        }
+        remove(node);
         return node.value;
     }
     
@@ -181,12 +176,10 @@ class LRUCache {
         
         if (node != null) {
             node.value = value;
-            if (node != tail) {
-                remove(node);
-            }
+            remove(node);
         } else {
             node = new Node(key, value);
-            if(capacity == 0) {
+            if (capacity == 0) {
                 Node temp = head;
                 head = head.next;
                 map.remove(temp.key);
@@ -203,21 +196,24 @@ class LRUCache {
         }
     }
     
+    //remove  将头node 挪到 尾处，    get 值存在时   put值存在时用
     public void remove(Node node) {
+         if (node != tail) {
             if (node == head) {
-                head = node.next;
+                head = head.next;
             } else {
+                node.pre.next = node.next;
                 node.next.pre = node.pre;
-                node.pre.next= node. next;
             }
-                addTail(node);
-                tail = node;
+            
+            addTail(node);
+        }
     }
-    
+    // 把node 加入 linkedlist 尾巴 （ 1.get值存在  2. put 值存在，配合remove 用 3 put值不存在 new 一个新的  node点  单独用）
     public void addTail(Node node) {
-                tail.next = node;
-                node.pre = tail;
-                node.next = null;
-                tail = node;
+            tail.next = node;
+            node.pre = tail;
+            node.next = null;
+            tail = node;
     }
 }
