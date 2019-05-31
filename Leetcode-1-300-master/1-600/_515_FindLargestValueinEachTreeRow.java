@@ -46,8 +46,9 @@ public class _515_FindLargestValueinEachTreeRow {
 
         Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
-        int max = Integer.MIN_VALUE;
+        
         while (!queue.isEmpty()) {
+            int max = Integer.MIN_VALUE;
             int size = queue.size();
             for (int i = 0; i < size; i++) {
                 TreeNode cur = queue.poll();
@@ -56,7 +57,6 @@ public class _515_FindLargestValueinEachTreeRow {
                 if (cur.right != null) queue.offer(cur.right);
             }
             res.add(max);
-            max = Integer.MIN_VALUE;
         }
 
         return res;
