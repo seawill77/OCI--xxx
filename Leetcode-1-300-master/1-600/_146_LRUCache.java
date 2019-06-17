@@ -180,9 +180,9 @@ class LRUCache {
         } else {
             node = new Node(key, value);
             if (capacity == 0) {
-                Node temp = head;
+                map.remove(head.key);
                 head = head.next;
-                map.remove(temp.key);
+        
                 capacity++;
             }
             if (head == null && tail == null) {
