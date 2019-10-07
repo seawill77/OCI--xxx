@@ -23,7 +23,7 @@ public class _572_SubtreeofAnotherTree {
     public boolean isSubtree(TreeNode s, TreeNode t) {
         if (s == null) return false;
         if (isSameTree(s, t)) return true;
-        return isSameTree(s.left, t) || isSameTree(s.right, t);
+        return isSubTree(s.left, t) || isSubTree(s.right, t);
     }
 
     public static boolean isSameTree(TreeNode p, TreeNode q) {
