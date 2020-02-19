@@ -27,6 +27,53 @@ public class _352_DataStreamasDisjointIntervals {
      val = 0
 
      */
+    
+    class SummaryRanges {
+
+    TreeMap<Integer, int[]> map;
+    /** Initialize your data structure here. */
+    public SummaryRanges() {
+        map = new TreeMap<>();
+    }
+    
+    public void addNum(int val) {
+        Integer floor = map.floorKey(val);
+        Integer ceiling = map.ceilingKey(val);
+        
+        int[] insert = new int[2];
+        insert[0] = val;
+        insert[1] = val;
+        
+        if (floor != null) {
+            //[1,3] [2] ==> [1,3]
+            if (map.get(floor)[1] >= val) {
+                return;
+            } else {
+                if (map.get(floor)[1] == val-1) {
+                    insert[0] = floor;
+                    insert[1] = val;
+                    map.remove(floor);
+                }
+            }
+        }
+        
+        if (ceiling != null) {
+            if (map.get(ceiling)[0] == val + 1) {
+                insert[1] = map.get(ceiling)[1];
+                map.remove(val+1);
+            }
+        }
+        
+        map.put(insert[0], insert);
+    }
+    
+    public int[][] getIntervals() {
+        return map.values().toArray(new int[map.size()][2]);
+    }
+}
+    
+    
+    
 
     TreeMap<Integer, Interval> treeMap;
 
