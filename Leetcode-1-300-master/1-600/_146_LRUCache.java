@@ -52,168 +52,65 @@ public class _146_LRUCache {
      time : O(1)
      **/
 
-    class Node {
-        int key;
-        int value;
-        Node next;
-        Node pre;
-        public Node(int key, int value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
-    private HashMap<Integer, Node> map;
-    private int capacity;
-    private Node head;
-    private Node tail;
-
-    public _146_LRUCache(int capacity) {
-        map = new HashMap<>();
-        this.capacity = capacity;
-        head = null;
-        tail = null;
-    }
-
-    public int get(int key) {
-        Node node = map.get(key);
-        if (node == null) {
-            return -1;
-        }
-        if (node != tail) {
-            if (node == head) {
-                head = head.next;
-            } else {
-                node.pre.next = node.next;
-                node.next.pre = node.pre;
-            }
-            tail.next = node;
-            node.pre = tail;
-            node.next = null;
-            tail = node;
-        }
-        return node.value;
-    }
-
-    public void put(int key, int value) {
-        Node node = map.get(key);
-        if (node != null) {
-            node.value = value;
-            if (node != tail) {
-                if (node == head) {
-                    head = head.next;
-                } else {
-                    node.pre.next = node.next;
-                    node.next.pre = node.pre;
-                }
-                tail.next = node;
-                node.pre = tail;
-                node.next = null;
-                tail = node;
-            }
-        } else {
-            Node newNode = new Node(key, value);
-            if (capacity == 0) {
-                Node temp = head;
-                head = head.next;
-                map.remove(temp.key);
-                capacity++;
-            }
-            if (head == null && tail == null) {
-                head = newNode;
-            } else {
-                tail.next = newNode;
-                newNode.pre = tail;
-                newNode.next = null;
-            }
-            tail = newNode;
-            map.put(key, newNode);
-            capacity--;
-        }
-    }
-}
-
-
-******************************
-******************************
-
-
-class LRUCache {
+   class LRUCache {
     
-    class Node {
-        Node pre;
-        Node next;
-        int key;
-        int value;
-        public Node(int key, int value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-    
-    int capacity;
-    HashMap<Integer, Node> map;
-    Node head;
-    Node tail;
-
+    Map<Integer, ListNode> map = null;
+    int capacity = 0;
+    ListNode head = new ListNode();
+    ListNode tail = new ListNode();
     public LRUCache(int capacity) {
         this.capacity = capacity;
         map = new HashMap<>();
-        head = null;
-        tail = null;
+        head.next = tail;
+        tail.prev = head;
     }
     
     public int get(int key) {
-        Node node = map.get(key);
-        if (node == null) return -1;
-        
-        remove(node);
-        return node.value;
+        ListNode node = map.get(key);
+        if(node != null) {
+            removeNode(node);
+            addNode(node);
+            return node.val;
+        }
+        return -1;
     }
-    
+
     public void put(int key, int value) {
-        Node node = map.get(key);
-        
-        if (node != null) {
-            node.value = value;
-            remove(node);
+        ListNode node = map.get(key);
+        if(node != null) {
+            removeNode(node);
+            node.val = value;
+            addNode(node);
         } else {
-            node = new Node(key, value);
-            if (capacity == 0) {
-                map.remove(head.key);
-                head = head.next;
-        
-                capacity++;
+            if(map.size() == capacity) {
+                map.remove(tail.prev.key);
+                removeNode(tail.prev);
             }
-            if (head == null && tail == null) {
-                head = node;
-                tail = node;
-            } else {
-                addTail(node);
-            }
-            map.put(key, node);
-            capacity--;
+            ListNode newNode = new ListNode();
+            newNode.key = key;
+            newNode.val = value;
+            map.put(key, newNode);
+            addNode(newNode);
         }
     }
     
-    //remove  将头node 挪到 尾处，    get 值存在时   put值存在时用
-    public void remove(Node node) {
-         if (node != tail) {
-            if (node == head) {
-                head = head.next;
-            } else {
-                node.pre.next = node.next;
-                node.next.pre = node.pre;
-            }
-            
-            addTail(node);
-        }
+    private void addNode(ListNode node) {
+        ListNode temp = head.next;
+        head.next = node;
+        node.next = temp;
+        temp.prev = node;
+        node.prev = head;
     }
-    // 把node 加入 linkedlist 尾巴 （ 1.get值存在  2. put 值存在，配合remove 用 3 put值不存在 new 一个新的  node点  单独用）
-    public void addTail(Node node) {
-            tail.next = node;
-            node.pre = tail;
-            node.next = null;
-            tail = node;
+    
+    private void removeNode(ListNode node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+    
+    class ListNode {
+        int key;
+        int val;
+        ListNode next;
+        ListNode prev;
     }
 }
