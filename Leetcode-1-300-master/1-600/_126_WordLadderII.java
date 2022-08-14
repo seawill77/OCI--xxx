@@ -59,12 +59,12 @@ public class _126_WordLadderII {
      */
 
 
+    class Solution {
     public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        
         List<List<String>> res = new ArrayList<>();
         if (wordList.size() == 0) return res;
 
-        int curNum = 1;
-        int nextNum = 0;
         boolean found = false;
 
         Queue<String> queue = new LinkedList<>();
@@ -75,16 +75,16 @@ public class _126_WordLadderII {
 
         queue.offer(beginWord);
         while (!queue.isEmpty()) {
-            String word = queue.poll();
-            curNum--;
-            for (int i = 0; i < word.length(); i++) {
+            int size = queue.size();
+            for (int s = 0; s < size; s++) {
+                String word = queue.poll();
+                for (int i = 0; i < word.length(); i++) {
                 StringBuilder builder = new StringBuilder(word);
                 for (char ch = 'a'; ch <= 'z'; ch++) {
                     builder.setCharAt(i, ch);
                     String newWord = builder.toString();
                     if (unvisited.contains(newWord)) {
                         if (visited.add(newWord)) {
-                            nextNum++;
                             queue.offer(newWord);
                         }
                         if (map.containsKey(newWord)) {
@@ -96,17 +96,14 @@ public class _126_WordLadderII {
                         }
                         if (newWord.equals(endWord)) {
                             found = true;
+                            }
                         }
                     }
                 }
             }
-            if (curNum == 0) {
-                if (found) break;
-                curNum = nextNum;
-                nextNum = 0;
-                unvisited.removeAll(visited);
-                visited.clear();
-            }
+            if (found) break;
+            unvisited.removeAll(visited);
+            visited.clear();
         }
         dfs(res, new ArrayList<>(), map, endWord, beginWord);
         return res;
@@ -127,5 +124,6 @@ public class _126_WordLadderII {
             }
         }
         list.remove(0);
+        
     }
 }
