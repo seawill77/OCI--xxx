@@ -67,3 +67,34 @@ public class _44_WildcardMatching {
         return pp == p.length();
     }
 }
+
+
+
+
+//一个 *  only
+
+
+int sp = 0;
+        int pp = 0;
+        int star = -1;
+        
+        
+        while (sp < s.length()) {
+            
+            if (pp < p.length() && s.charAt(sp) == p.charAt(pp)) {
+                sp++;
+                pp++;
+            } else if (pp < p.length() && p.charAt(pp) == '*') {
+                star = pp;
+                pp++;
+            } else if (star != -1) {
+                pp = star + 1;
+                sp++;
+            } else {
+                return false;
+            }
+
+        }
+        
+        
+        return  pp == p.length();
