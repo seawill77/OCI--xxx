@@ -41,6 +41,13 @@ public class _44_WildcardMatching {
      * @param s
      * @param p
      * @return
+     
+     
+     
+     test case  
+     
+     	"abcabczzzde"
+	"*abczzzde" 
      */
     public boolean isMatch(String s, String p) {
         int sp = 0;
