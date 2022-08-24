@@ -78,7 +78,7 @@ public class _44_WildcardMatching {
 
 
 
-//一个 *  only
+
 
 public boolean isMatch_2d_method(String s, String p) {
 	int m=s.length(), n=p.length();
@@ -107,3 +107,28 @@ public boolean isMatch_2d_method(String s, String p) {
 	}
 	return dp[m][n];
 }
+
+
+
+
+
+//一个 *  only
+
+class Solution {
+    public boolean isMatch(String s, String p) {
+        
+        int sl = 0; 
+        int pl = 0;
+        int sr = s.length() - 1;
+        int pr = p.length() - 1;
+
+        while (pl < p.length()) {
+            if (p.charAt(pl) == '*') break;
+            if (sl < s.length() && s.charAt(sl++) != p.charAt(pl++)) return false;
+        }
+         while (pr >= 0) {
+            if (p.charAt(pr) == '*') break;
+            if (sr >= 0 && s.charAt(sr--) != p.charAt(pr--)) return false;
+        }
+        return true;
+    }   
