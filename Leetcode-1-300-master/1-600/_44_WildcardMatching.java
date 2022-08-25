@@ -43,6 +43,41 @@ public class _44_WildcardMatching {
      * @return
      
      
+     public boolean isMatch(String s, String p) {
+     
+     
+       String[] parttens = p.split("\\*");
+        
+        
+        int end = 0; 
+        
+        for (String pattern: parttens) {
+            
+            int index = s.indexOf(pattern, end);
+            
+            if (end == 0 && index != 0) {
+                if (p.charAt(0) != '*') {
+                    return false;
+                }
+            }
+            
+            if (index != -1) {
+                end = index + pattern.length();
+            } else {
+                return false;
+            }
+            
+        }
+        
+        if (end != s.length()) {
+            if (p.charAt(p.length() - 1) == '*') {
+                return true;
+            }
+        }
+        return false;
+	
+     }
+     
      
      test case  
      
