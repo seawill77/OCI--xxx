@@ -76,7 +76,7 @@ public class _44_WildcardMatching {
 }
 
 
-
+//coner case: "abcabczzzde"    "*abc???de*"
 
 
 
@@ -116,19 +116,26 @@ public boolean isMatch_2d_method(String s, String p) {
 
 class Solution {
     public boolean isMatch(String s, String p) {
-        
-        int sl = 0; 
+int sl = 0; 
         int pl = 0;
         int sr = s.length() - 1;
         int pr = p.length() - 1;
-
+        boolean isStar = false;
+        
+        
         while (pl < p.length()) {
-            if (p.charAt(pl) == '*') break;
+            if (p.charAt(pl) == '*') {
+                isStar = true;
+                break;
+            }
             if (sl < s.length() && s.charAt(sl++) != p.charAt(pl++)) return false;
         }
-         while (pr >= 0) {
+        
+        while (pr >= 0) {
             if (p.charAt(pr) == '*') break;
             if (sr >= 0 && s.charAt(sr--) != p.charAt(pr--)) return false;
         }
-        return true;
+        
+        
+        return isStar ? s.length() >= p.length() - 1 : s.length() == p.length();
     }   
