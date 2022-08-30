@@ -53,7 +53,7 @@ public class _127_WordLadder {
             if(cur.equals(endWord)){ return level + 1;}
             for(int j = 0; j < cur.length(); j++){
                 char[] word = cur.toCharArray();
-                for(char ch = 'a'; ch < 'z'; ch++){
+                for(char ch = 'a'; ch <= 'z'; ch++){
                     word[j] = ch;
                     String check = new String(word);
                     if(!check.equals(cur) && wordList.contains(check)){
