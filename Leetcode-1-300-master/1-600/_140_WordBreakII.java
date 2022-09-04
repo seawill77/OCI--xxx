@@ -32,6 +32,46 @@ public class _140_WordBreakII {
      * @return
      */
 
+    
+    
+    
+    
+    
+    HashMap<String, List<String>> map = new HashMap<>();
+    public List<String> wordBreak(String s, List<String> wordDict) {
+       
+        return dfs (s, wordDict);
+    }
+    
+    public List<String> dfs(String s, List<String> wordDict) {
+        if (map.containsKey(s)) {
+            return map.get(s);
+        }
+        
+        List<String> res = new ArrayList<>();
+        if (s.length() == 0) {
+            res.add("");
+            return res;
+        }
+        
+        for (String word: wordDict) {
+            if (s.startsWith(word)) {
+                List<String> list = dfs (s.substring(word.length()), wordDict);
+                for (String str: list) {
+                    res.add(word + (str == "" ? "" : " " + str));
+                }
+            }
+        }
+        
+        map.put(s, res);
+        
+        return res;
+    
+    
+    
+    
+    
+    
     HashMap<Integer, List<String>> map = new HashMap<>();
 
     // DFS
@@ -59,3 +99,9 @@ public class _140_WordBreakII {
         return res;
     }
 }
+
+
+
+
+
+
