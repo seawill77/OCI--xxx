@@ -40,6 +40,43 @@ public class _127_WordLadder {
      * @return
      */
     
+     HashSet<String> set = new HashSet<>(wordList);
+        if (set.contains(beginWord)) {
+            set.remove(beginWord);
+        }
+        
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        int level = 0;
+        
+        while (!queue.isEmpty()) {
+            
+            int size = queue.size();
+            
+            for (int i = 0; i < size; i++) {
+                String str = queue.poll();
+                if (str.equals(endWord)) return level + 1;
+                
+                for (int j = 0; j < str.length(); j++) {
+                    char[] ch = str.toCharArray();
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        ch[j] = c;
+                        String check = new String(ch);
+                        
+                        if (set.contains(check)) {
+                            queue.offer(check);
+                            set.remove(check);
+                        }
+                    }
+                }
+            }
+            level++;
+        }
+        
+        
+        return 0;
+    
+    
     
     public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
     wordList.add(endWord);
