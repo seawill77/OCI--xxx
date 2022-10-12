@@ -21,6 +21,43 @@ public class _218_TheSkylineProblem {
      * @param buildings
      * @return
      */
+    
+    class Solution {
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<int[]> heights = new ArrayList<>();
+        
+        // transforming buildings
+        for (int[] building : buildings) {          // O(n)
+            heights.add(new int[] {building[0], -building[2]});
+            heights.add(new int[] {building[1], building[2]});
+        }
+        
+        Collections.sort(heights, (a, b) -> (a[0] == b[0]) ? a[1] - b[1] : a[0] - b[0]);    // O(nlogn)
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+        pq.offer(0);
+        
+        int prevMax = 0;
+        
+        for (int[] height : heights) {  // O(n)
+            // priority queue operations take O(logn)
+            if (height[1] < 0) pq.offer(-height[1]);
+            else pq.remove(height[1]);
+            
+            int currMax = pq.peek();
+            
+            if (currMax != prevMax) {
+                res.add(Arrays.asList(height[0], currMax));
+                prevMax = currMax;
+            }
+        }
+        
+        return res;
+    }
+}
+    
+    
     public List<int[]> getSkyline(int[][] buildings) {
         List<int[]> res = new ArrayList<>();
         List<int[]> heights = new ArrayList<>();
@@ -54,35 +91,33 @@ public class _218_TheSkylineProblem {
      * @return
      */
 
-    public List<int[]> getSkyline2(int[][] buildings) {
-        List<int[]> res = new ArrayList<>();
-        List<int[]> heights = new ArrayList<>();
-        for (int[] b: buildings) {
-            heights.add(new int[]{b[0], - b[2]});
-            heights.add(new int[]{b[1], b[2]});
+    class Solution {
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        List<List<Integer>> list = new ArrayList<>();
+        
+        List<int[]> lines = new ArrayList<>();
+        for (int[] building: buildings) {
+            lines.add(new int[] {building[0], building[2]});
+            lines.add(new int[] {building[1], -building[2]});
         }
-        Collections.sort(heights, (a, b) -> (a[0] == b[0]) ? a[1] - b[1] : a[0] - b[0]);
-        TreeMap<Integer, Integer> map = new TreeMap<>(Collections.reverseOrder());
-        map.put(0,1);
-        int prev = 0;
-
-        for (int[] h: heights) {
-            if (h[1] < 0) {
-                map.put(-h[1], map.getOrDefault(-h[1], 0) + 1);
+        Collections.sort(lines, (a, b)->a[0]==b[0]?b[1]-a[1]:a[0]-b[0]);
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        map.put(0, 1);
+        int prev=0;
+        for (int[] line: lines) {
+            if (line[1]>0) {
+                map.put(line[1], map.getOrDefault(line[1], 0)+1);
             } else {
-                int cnt = map.get(h[1]);
-                if (cnt == 1) {
-                    map.remove(h[1]);
-                } else {
-                    map.put(h[1], cnt - 1);
-                }
+                int f = map.get(-line[1]);
+                if (f==1) map.remove(-line[1]);
+                else map.put(-line[1], f-1);
             }
-            int cur = map.firstKey();
-            if (prev != cur) {
-                res.add(new int[]{h[0], cur});
-                prev = cur;
+            int curr = map.lastKey();
+            if (curr!=prev) {
+                list.add(Arrays.asList(line[0], curr));
+                prev=curr;
             }
         }
-        return res;
+        return list;
     }
 }
