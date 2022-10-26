@@ -66,6 +66,7 @@ public class _460_LFUCache {
             list.put(count + 1, new LinkedHashSet<>());
         }
         list.get(count + 1).add(key);
+        counts.put(key, count + 1);
         return vals.get(key);
     }
 
