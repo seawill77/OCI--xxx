@@ -57,8 +57,89 @@ public class _126_WordLadderII {
      * @param wordList
      * @return
      */
+
+
+
+    ===================================================================================    ===================================================================================
+
+class Solution {
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        HashMap<String, List<String>> map = new HashMap<>();
+        HashSet<String> unvisit = new HashSet<>(wordList);
+        HashSet<String> vi = new HashSet<>();
+
+        //unvisit.addAll(wordList);
+
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        boolean found = false; 
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+
+            for (int i = 0; i < size; i++) {
+                String word = queue.poll();
+                for (int j = 0; j < word.length(); j++) {
+                    char[] charArr = word.toCharArray();
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        charArr[j] = c;
+                        String next = new String(charArr);
+                        if (unvisit.contains(next)) {
+                            if (vi.add(next)) {
+                                queue.offer(next);
+                            }
+                            if (!map.containsKey(next)) {
+                                map.put(next, new ArrayList<>());
+                            }
+                            map.get(next).add(word);
+                        }
+                        if (next.equals(endWord)) {
+                            found = true;
+                        }
+                    }
+                }
+            }
+            if (found) {
+                break;
+            }
+            unvisit.removeAll(vi);
+            vi.clear();
+        }
+
+        List<List<String>> res = new ArrayList<>();
+        
+        dfs(res, new ArrayList<>(), map, beginWord, endWord);
+
+        return res;
+    }
+
+
+
+    public void dfs(List<List<String>> res, List<String> list, HashMap<String, List<String>> map, String target, String word) {
+            
+        if (word.equals(target)) {
+            list.add(0, target);
+            res.add(new ArrayList<>(list));
+            list.remove(0);
+            return;
+        }
+
+        list.add(0, word);
+
+        if (map.containsKey(word)) {
+            for (String str : map.get(word)) {
+                dfs(res, list, map, target, str);
+            }
+        }
+
+        list.remove(0);
+    }
+}
+
+
+
     
-    
+    ===================================================================================
     class Solution {
     public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
         
