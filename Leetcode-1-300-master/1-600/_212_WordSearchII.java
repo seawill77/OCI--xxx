@@ -14,6 +14,95 @@ import java.util.List;
  * - 官方网站：https://cspiration.com
  * - 版权所有，转发请注明出处
  */
+
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+class Solution {
+
+    int m, n;
+    Trie root;
+
+    List<String> res;
+    public List<String> findWords(char[][] board, String[] words) {
+        
+        root = new Trie();
+        buildTrie(words);
+
+        m = board.length;
+        n = board[0].length;
+        res = new ArrayList<>();
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                dfsSearch(board, i, j, root);
+            }
+        }
+
+
+        return res;
+    }
+
+    public void dfsSearch(char[][] board, int i, int j, Trie node) {
+        if (i < 0 || j < 0 || i >= m || j >= n || board[i][j] == '*') return;
+
+        char temp = board[i][j];
+        Trie next = node.next[temp - 'a'];
+        
+        if (next == null) return;
+        if (next.isWord != null) {
+            res.add(next.isWord);
+            next.isWord = null;
+        }
+        board[i][j] = '*';
+        
+        dfsSearch(board, i + 1, j, next);
+        dfsSearch(board, i , j + 1, next);
+        dfsSearch(board, i, j - 1, next);
+        dfsSearch(board, i - 1, j, next);
+
+        board[i][j] = temp;
+    }
+
+    public void buildTrie(String[] words) {
+
+        for (String word : words) {
+            Trie cur = root;
+            for (char ch: word.toCharArray()) {
+                int i = ch - 'a';
+                if (cur.next[i] == null) {
+                    cur.next[i] = new Trie();
+                }
+                cur = cur.next[i];
+            }
+            cur.isWord = word;
+        
+        }
+    }
+
+
+    class Trie {
+        Trie[] next = new Trie[30];
+        String isWord;
+    }
+}
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 public class _212_WordSearchII {
     /**
      * 212. Word Search II
