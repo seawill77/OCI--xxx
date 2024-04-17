@@ -97,6 +97,10 @@ public class AlienDictionary {
                     }
                     break;
                 }
+                //保证不是prefix 否则return
+                if (j == next.length - 1 && cur.length > next.length) {
+                    return "";
+                }
             }
         }
 
